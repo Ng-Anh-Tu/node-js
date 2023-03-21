@@ -63,11 +63,11 @@ export const remove = async (req, res) => {
     try {
         await Axios.delete(`${process.env.API_URI}/${req.params.id}`);
         return res.status(200).json({
-          message: "Sản phẩm đã được xóa thành công",
+          messenger: "  xóa thành công",
         });
       } catch (error) {
         return res.status(500).json({
-          message: error,
+          messenger: error,
         });
       }
     };
