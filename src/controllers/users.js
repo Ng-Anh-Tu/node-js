@@ -1,11 +1,20 @@
-import Axios from 'axios';
-import dotenv from 'dotenv';
-dotenv.config();
+// import dotenv from 'dotenv';
+import Joi from 'joi';
+import  user  from '../modules/users.js';
+// dotenv.config();
+
+const userSchema =Joi.object({
+  name: Joi.string().required().min(3),
+  username: Joi.string().required(),
+  email: Joi.string(),
+  phone: Joi.number().required()
+})
 export const getAll = async (req, res) => {
     try {
-        const { data: users } = await Axios.get(
-            "http://localhost:3000/users"
-        );
+        // const { data: users } = await Axios.get(
+        //    `${process.env.API_URI}`
+        // );
+        const users = await user.find();
         if (users.length === 0) {
             res.send({
                 messenger: "khong co thang nao",
@@ -19,7 +28,8 @@ export const getAll = async (req, res) => {
 
 export const getDetail = async (req, res) => {
     try {
-      const { data: users } = await Axios.get(`${process.env.API_URI}/${req.params.id}`);
+      // const { data: users } = await Axios.get(`${process.env.API_URI}/${req.params.id}`);
+      const users = await user.findById(req.params.id);
       if (!users) {
         res.send({
           messenger: "Không tìm thấy thang nao",
@@ -33,7 +43,8 @@ export const getDetail = async (req, res) => {
   
 export const create = async (req, res) => {
     try {
-        const { data: users } = await Axios.post(`${process.env.API_URI}`, req.body);
+        // const { data: users } = await Axios.post(`${process.env.API_URI}`, req.body);
+        const users = await user.create(req.body);
         if (!users) {
             res.send({
                 messenger: "khong co thang nao duoc them ca",
@@ -47,7 +58,8 @@ export const create = async (req, res) => {
 
 export const update = async (req, res) => {
     try {
-        const { data: users } = await Axios.put(`${process.env.API_URI}/${req.params.id}`, req.body);
+        // const { data: users } = await Axios.put(`${process.env.API_URI}/${req.params.id}`, req.body);
+        const users = await user.findByIdAndUpdate(req.params.id, req.body);
         if (!users) {
             res.send({
                 messenger: "them khong thanh cong",
@@ -61,7 +73,8 @@ export const update = async (req, res) => {
 
 export const remove = async (req, res) => {
     try {
-        await Axios.delete(`${process.env.API_URI}/${req.params.id}`);
+        // await Axios.delete(`${process.env.API_URI}/${req.params.id}`);
+        const users = await user.deleteOne(req.params.id)
         return res.status(200).json({
           messenger: "  xóa thành công",
         });
